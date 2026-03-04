@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise 🎉</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+  
+  body {
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ffd6ec, #e6ccff, #cceeff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+  }
+
+  .confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    opacity: 0.8;
+    animation: float 10s linear infinite;
+    top: -10%;
+  }
+
+  @keyframes float {
+    from { transform: translateY(0vh) rotate(0deg); }
+    to { transform: translateY(110vh) rotate(720deg); }
+  }
+
+  h1 {
+    position: absolute;
+    top: 5%;
+    width: 100%;
+    font-size: 1.8rem;
+    color: #6a0572;
+    z-index: 5;
+  }
+
+  #gift {
+    font-size: 6rem;
+    cursor: pointer;
+    position: absolute;
+    transition: all 0.25s ease-out;
+    z-index: 10;
+    user-select: none;
+  }
+
+  /* Reveal Layout */
+  .reveal-container {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeIn 0.8s forwards;
+    max-width: 90%;
+  }
+
+  .cat { font-size: 5rem; margin-bottom: -20px; z-index: 2; }
+  
+  .cake-img {
+    width: 250px;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+  }
+
+  .message {
+    font-family: 'Pacifico', cursive;
+    font-size: 2rem;
+    color: #ff2e88;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  .sub-message {
+    font-size: 1.5rem;
+    color: #6a0572;
+    font-weight: bold;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .show-sub {
+    animation: slideUp 0.6s forwards;
+    opacity: 1;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+  @keyframes slideUp { to { transform: translateY(0); } }
+
+  @media(max-width: 600px) {
+    .cake-img { width: 180px; }
+    .message { font-size: 1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1 id="instruction">Catch the gift to see your surprise! 🎁</h1>
+
+<div id="gift">🎁</div>
+
+<div class="reveal-container" id="reveal">
+  <div class="cat">🐱</div>
+  <img src="[attachment_0](attachment)" alt="Birthday Cake" class="cake-img">
+  <div class="message">Happy Birthday to my dearest pyari se choti se bahena 💖</div>
+  <div id="subMessage" class="sub-message">Where is my party? 🥳</div>
+</div>
+
+<audio id="popSound" src="https://www.soundjay.com/button/sounds/button-16.mp3"></audio>
+
+<script>
+  const gift = document.getElementById("gift");
+  const reveal = document.getElementById("reveal");
+  const subMessage = document.getElementById("subMessage");
+  const instruction = document.getElementById("instruction");
+  const popSound = document.getElementById("popSound");
+
+  let dodgeCount = 0;
+  const maxDodges = 5;
+
+  gift.style.left = "50%";
+  gift.style.top = "50%";
+  gift.style.transform = "translate(-50%, -50%)";
+
+  function moveGift() {
+    if (dodgeCount < maxDodges) {
+      const x = Math.random() * (window.innerWidth - 150) + 75;
+      const y = Math.random() * (window.innerHeight - 150) + 75;
+      
+      gift.style.left = x + "px";
+      gift.style.top = y + "px";
+      gift.style.transform = "translate(-50%, -50%)";
+      dodgeCount++;
+      
+      if(dodgeCount === maxDodges) {
+        instruction.innerText = "Almost had it! CLICK NOW! 😂";
+        instruction.style.color = "#ff2e88";
+      }
+    }
+  }
+
+  gift.addEventListener("mouseover", moveGift);
+
+  gift.addEventListener("click", () => {
+    if (dodgeCount >= maxDodges) {
+      gift.style.display = "none";
+      instruction.style.display = "none";
+      reveal.style.display = "flex";
+      popSound.play().catch(() => {});
+      
+      setTimeout(() => {
+        subMessage.classList.add("show-sub");
+      }, 2000);
+    }
+  });
+
+  for (let i = 0; i < 40; i++) {
+    const conf = document.createElement("div");
+    conf.classList.add("confetti");
+    conf.style.left = Math.random() * 100 + "vw";
+    conf.style.backgroundColor = `hsl(${Math.random()*360}, 70%, 80%)`;
+    conf.style.animationDuration = (4 + Math.random() * 4) + "s";
+    conf.style.animationDelay = Math.random() * 3 + "s";
+    document.body.appendChild(conf);
+  }
+</script>
+
+</body>
+</html>
